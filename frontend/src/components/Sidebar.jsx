@@ -4,10 +4,16 @@ import { X, MapPin, Clock, IndianRupee, Info } from 'lucide-react';
 export default function Sidebar({ filters, setFilters, stats, isOpen, onClose }) {
   return (
     <div
-      className={`fixed inset-0 z-40 mt-16 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:inset-auto md:z-auto ${
-        isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
-      }`}
-    >
+  className={`transition-transform duration-300 ease-in-out mt-16 
+    fixed inset-0 z-40 
+    md:relative md:inset-auto md:z-auto md:translate-x-0 
+    ${
+      isOpen
+        ? 'translate-x-0 pointer-events-auto'
+        : 'pointer-events-none -translate-x-full md:pointer-events-auto md:translate-x-0'
+    }`}
+>
+
       {/* Backdrop */}
       {isOpen && (
         <div

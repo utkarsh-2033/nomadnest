@@ -6,15 +6,16 @@ import ItineraryDisplay from './components/ItineraryDisplay';
 import Footer from './components/Footer';
 import { generateItinerary } from './api/api';
 
-function App() {
+export default function App() {
   const [filters, setFilters] = useState({
     avoidCrowds: false,
-    includeGems: true,
+    includeGems: false,
     preferHistorical: false,
     travelMode: 'cab',
-    sortBy: 'cheapest'
   });
+
   const [stats, setStats] = useState(null);
+  const [city, setcity] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [itinerary, setItinerary] = useState(null);
 
@@ -23,8 +24,11 @@ function App() {
       const payload = { ...formData, filters };
       const data = await generateItinerary(payload);
       setItinerary(data.itinerary);
+      setcity(data.city);
       setStats({
         totalHoursPlanned: data.totals.hoursPlanned,
+        travelCost: data.totals.travelCost,
+        entryFees: data.totals.entryFees,
         totalCost: data.totals.totalCost,
         budgetRemaining: formData.budget - data.totals.totalCost
       });
@@ -37,7 +41,6 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar onSidebarToggle={() => setSidebarOpen(true)} />
-
       <div className="flex flex-1">
         <Sidebar
           filters={filters}
@@ -48,12 +51,23 @@ function App() {
         />
         <main className="flex-1 min-h-screen p-6 mt-16 bg-gray-50">
           <ItineraryForm onGenerate={handleGenerate} />
-          {itinerary && <ItineraryDisplay data={{ itinerary, totals: { hoursPlanned: stats.totalHoursPlanned, cabCost: stats.totalCost, entryFees: 0, totalCost: stats.totalCost } }} />}
+          {itinerary && stats && (
+            <ItineraryDisplay
+              data={{
+                city,
+                itinerary,
+                totals: {
+                  hoursPlanned: stats.totalHoursPlanned,
+                  cabCost: stats.travelCost,
+                  entryFees: stats.entryFees,
+                  totalCost: stats.totalCost,
+                }
+              }}
+            />
+          )}
         </main>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
-
-export default App;

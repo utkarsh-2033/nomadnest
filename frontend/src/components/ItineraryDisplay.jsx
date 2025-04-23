@@ -2,8 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function ItineraryDisplay({ data }) {
+  console.log(data.city);
   return (
     <div className="space-y-10 p-4">
+      <h2 className="text-3xl font-bold text-indigo-900 mb-6">🗺️ {data.city?data.city:"hello"} Itinerary</h2>
+
       {data.itinerary.map(day => (
         <motion.div
           key={day.day}

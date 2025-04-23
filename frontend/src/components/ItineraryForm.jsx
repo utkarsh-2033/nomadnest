@@ -6,7 +6,7 @@ export default function ItineraryForm({ onGenerate }) {
     durationType: 'days',
     duration: 1,
     budget: 1000,
-    preferredPlaces: ''
+    preferredCategory: 'historical'
   });
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -18,7 +18,8 @@ export default function ItineraryForm({ onGenerate }) {
     try {
       const payload = {
         ...form,
-        preferredPlaces: form.preferredPlaces.split(',').map(p => p.trim())
+        // previously preferredPlaces array, now single category string
+        preferredCategory: form.preferredCategory
       };
       await onGenerate(payload);
     } catch (err) {
@@ -80,16 +81,21 @@ export default function ItineraryForm({ onGenerate }) {
           />
         </div>
 
-        {/* Preferred Places */}
+        {/* Preferred Category */}
         <div className="flex flex-col">
-          <label className="text-sm font-semibold text-gray-700 mb-1">Preferred Places</label>
-          <input
-            type="text"
-            placeholder="e.g. India Gate, Qutub Minar"
-            value={form.preferredPlaces}
-            onChange={e => setForm({ ...form, preferredPlaces: e.target.value })}
+          <label className="text-sm font-semibold text-gray-700 mb-1">Preferred Category</label>
+          <select
+            value={form.preferredCategory}
+            onChange={e => setForm({ ...form, preferredCategory: e.target.value })}
             className="bg-white/50 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          />
+          >
+            <option value="historical">Historical Sites</option>
+            <option value="lakes_and_scenery">Lakes & Scenery</option>
+            <option value="beaches">Beaches</option>
+            <option value="mountains">Mountains</option>
+            <option value="hiking">Hiking</option>
+            <option value="deserts">Deserts</option>
+          </select>
         </div>
       </div>
 
